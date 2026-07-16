@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#9ecfff" />
+  <title>Ali For Ajwa</title>
+  <style>
+    :root{
+      --sky1:#87c8ff;
+      --sky2:#d8efff;
+      --blue:#4c86c6;
+      --deep:#244f7d;
+      --paper:#fffdf8;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      min-height:100vh;
+      overflow-x:hidden;
+      font-family:Georgia, "Times New Roman", serif;
+      color:var(--deep);
+      background:linear-gradient(180deg,var(--sky1),var(--sky2) 48%,#f7fcff);
+    }
+
+    button{font:inherit}
+    .page{
+      min-height:100vh;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:26px 18px;
+      position:relative;
+      overflow:hidden;
+    }
+    .page.active{display:flex;animation:fade .8s ease}
+    @keyframes fade{from{opacity:0;transform:scale(1.02)}to{opacity:1;transform:scale(1)}}
+
+    .cloud{
+      position:absolute;
+      width:180px;height:58px;
+      background:rgba(255,255,255,.82);
+      border-radius:999px;
+      filter:drop-shadow(0 10px 15px rgba(62,112,159,.12));
+      animation:drift 18s linear infinite;
+    }
+    .cloud::before,.cloud::after{
+      content:"";position:absolute;background:inherit;border-radius:50%;
+    }
+    .cloud::before{width:75px;height:75px;left:28px;top:-34px}
+    .cloud::after{width:92px;height:92px;right:25px;top:-45px}
+    .c1{top:12%;left:-190px}
+    .c2{top:66%;left:-230px;animation-duration:24s;animation-delay:-7s;transform:scale(.72)}
+    .c3{top:34%;left:-210px;animation-duration:30s;animation-delay:-14s;transform:scale(.55)}
+    @keyframes drift{to{left:110%}}
+
+    .rainbow{
+      width:min(72vw,520px);
+      aspect-ratio:2/1;
+      border-radius:520px 520px 0 0;
+      background:
+        radial-gradient(ellipse at center bottom,
+          transparent 0 42%,
+          #8fd2ff 42% 48%,
+          #91e2c6 48% 54%,
+          #ffe68f 54% 60%,
+          #ffb3c7 60% 66%,
+          #ba9cff 66% 72%,
+          transparent 72%);
+      opacity:.75;
+      position:absolute;
+      top:7%;
+      left:50%;
+      transform:translateX(-50%);
+      filter:blur(.2px);
+    }
+
+    .hero{
+      position:relative;
+      z-index:3;
+      text-align:center;
+      max-width:720px;
+      padding:32px 24px;
+      border-radius:30px;
+      background:rgba(255,255,255,.25);
+      backdrop-filter:blur(10px);
+      box-shadow:0 24px 70px rgba(40,93,141,.18);
+      border:1px solid rgba(255,255,255,.55);
+    }
+    h1{
+      margin:0 0 8px;
+      font-size:clamp(3rem,10vw,6.2rem);
+      font-weight:500;
+      letter-spacing:.03em;
+      text-shadow:0 3px 18px rgba(255,255,255,.85);
+    }
+    .subtitle{
+      margin:0 auto 26px;
+      font-size:clamp(1rem,3.8vw,1.35rem);
+      max-width:530px;
+      line-height:1.7;
+    }
+
+    .btn{
+      border:0;
+      border-radius:999px;
+      color:white;
+      background:linear-gradient(135deg,#4e92db,#315f9e);
+      padding:14px 26px;
+      cursor:pointer;
+      box-shadow:0 12px 28px rgba(49,95,158,.28);
+      transition:.25s ease;
+    }
+    .btn:hover,.btn:focus-visible{transform:translateY(-2px) scale(1.02)}
+    .btn.secondary{background:rgba(255,255,255,.76);color:var(--deep)}
+
+    .flowers{
+      position:absolute;inset:0;pointer-events:none;z-index:2;
+    }
+    .flower{
+      position:absolute;
+      font-size:clamp(28px,6vw,64px);
+      filter:drop-shadow(0 10px 10px rgba(34,86,137,.16));
+      animation:sway 4s ease-in-out infinite;
+    }
+    .f1{left:4%;bottom:6%}.f2{right:5%;bottom:10%;animation-delay:-1.3s}
+    .f3{left:12%;top:15%;font-size:34px;animation-delay:-2s}
+    .f4{right:12%;top:18%;font-size:38px;animation-delay:-.8s}
+    @keyframes sway{50%{transform:rotate(7deg) translateY(-8px)}}
+
+    .envelope-wrap{
+      position:relative;z-index:4;text-align:center;width:min(92vw,560px);
+    }
+    .envelope{
+      position:relative;
+      width:min(88vw,460px);
+      height:290px;
+      margin:20px auto 30px;
+      background:#79afe5;
+      border-radius:10px;
+      box-shadow:0 28px 55px rgba(37,84,128,.25);
+      cursor:pointer;
+      perspective:1000px;
+    }
+    .envelope::before{
+      content:"";
+      position:absolute;inset:0;
+      clip-path:polygon(0 0,50% 58%,100% 0,100% 100%,0 100%);
+      background:#629bd5;
+      border-radius:10px;
+      z-index:3;
+    }
+    .flap{
+      position:absolute;inset:0;
+      clip-path:polygon(0 0,100% 0,50% 62%);
+      background:#9bc8ef;
+      transform-origin:top;
+      transition:transform 1s ease;
+      z-index:5;
+    }
+    .seal{
+      position:absolute;
+      left:50%;top:49%;
+      transform:translate(-50%,-50%);
+      z-index:6;
+      width:62px;height:62px;
+      border-radius:50%;
+      display:grid;place-items:center;
+      background:#fff4c8;
+      color:#5f86b0;
+      font-size:30px;
+      box-shadow:0 6px 18px rgba(0,0,0,.15);
+      transition:.4s;
+    }
+    .letter-card{
+      position:absolute;
+      left:7%;right:7%;bottom:8%;
+      height:82%;
+      background:var(--paper);
+      border-radius:8px;
+      z-index:2;
+      transition:transform 1s .35s ease;
+      box-shadow:0 5px 18px rgba(27,59,91,.15);
+    }
+    .envelope.open .flap{transform:rotateX(180deg);z-index:1}
+    .envelope.open .letter-card{transform:translateY(-135px)}
+    .envelope.open .seal{opacity:0;transform:translate(-50%,-50%) scale(.5)}
+
+    .paper{
+      position:relative;z-index:5;
+      width:min(94vw,760px);
+      max-height:84vh;
+      overflow:auto;
+      padding:clamp(26px,6vw,62px);
+      border-radius:16px;
+      background:
+        linear-gradient(rgba(255,255,255,.9),rgba(255,255,255,.9)),
+        repeating-linear-gradient(0deg,transparent 0 31px,#d7e8f6 31px 32px);
+      box-shadow:0 30px 80px rgba(31,79,124,.24);
+      border:1px solid rgba(71,125,177,.2);
+    }
+    .paper h2{font-size:clamp(2rem,7vw,3.6rem);font-weight:500;margin-top:0}
+    .paper p{font-size:clamp(1rem,3.6vw,1.22rem);line-height:1.9;margin:0 0 18px}
+    .signature{font-size:1.35rem;margin-top:30px}
+
+    .final-card{
+      position:relative;z-index:3;
+      width:min(94vw,700px);
+      padding:42px 26px;
+      text-align:center;
+      border-radius:30px;
+      background:rgba(255,255,255,.6);
+      backdrop-filter:blur(12px);
+      box-shadow:0 25px 70px rgba(37,82,126,.18);
+    }
+    .final-card h2{font-size:clamp(2.4rem,8vw,5rem);margin:.15em 0}
+    .final-card p{font-size:clamp(1rem,3.8vw,1.25rem);line-height:1.8}
+    .polaroid{
+      width:min(70vw,340px);
+      margin:24px auto;
+      background:white;
+      padding:14px 14px 42px;
+      transform:rotate(-2deg);
+      box-shadow:0 18px 35px rgba(36,76,115,.2);
+    }
+    .scene{
+      aspect-ratio:1/1;
+      display:grid;place-items:center;
+      font-size:92px;
+      background:linear-gradient(#7bc0ff,#edf8ff);
+      overflow:hidden;
+      position:relative;
+    }
+    .scene::before{content:"🌈";position:absolute;top:6%;font-size:110px}
+    .scene::after{content:"🩵 💙 🩵";position:absolute;bottom:8%;font-size:44px}
+
+    .controls{
+      position:fixed;
+      right:14px;top:14px;
+      z-index:20;
+      display:flex;gap:8px;
+    }
+    .round{
+      width:46px;height:46px;border-radius:50%;border:0;
+      background:rgba(255,255,255,.78);color:var(--deep);
+      backdrop-filter:blur(8px);cursor:pointer;
+      box-shadow:0 6px 20px rgba(37,82,126,.18);
+    }
+    .hint{font-size:.95rem;opacity:.8}
+    .petal{
+      position:fixed;
+      top:-40px;
+      z-index:8;
+      pointer-events:none;
+      animation:fall linear forwards;
+    }
+    @keyframes fall{
+      to{transform:translate3d(var(--drift),110vh,0) rotate(720deg);opacity:.2}
+    }
+
+    @media (max-width:600px){
+      .envelope{height:235px}
+      .envelope.open .letter-card{transform:translateY(-108px)}
+      .paper{max-height:88vh}
+    }
+  </style>
+</head>
+<body>
+  <div class="controls">
+    <button class="round" id="musicBtn" aria-label="Play or pause music">♫</button>
+    <button class="round" id="restartBtn" aria-label="Restart">↻</button>
+  </div>
+
+  <!-- Add your legally obtained audio file with this exact name beside index.html -->
+  <audio id="bgMusic" loop preload="metadata">
+    <source src="nej-paro-slowed.mp3" type="audio/mpeg">
+  </audio>
+
+  <section class="page active" id="page1">
+    <div class="rainbow"></div>
+    <div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div>
+    <div class="flowers">
+      <span class="flower f1">💠</span><span class="flower f2">🪻</span>
+      <span class="flower f3">🦋</span><span class="flower f4">💙</span>
+    </div>
+    <div class="hero">
+      <h1>Ali For Ajwa</h1>
+      <p class="subtitle">A small place in the sky, made with blue flowers, a rainbow, and sincere wishes for you.</p>
+      <button class="btn" onclick="goTo(2)">Open This Letter</button>
+    </div>
+  </section>
+
+  <section class="page" id="page2">
+    <div class="cloud c1"></div><div class="cloud c2"></div>
+    <div class="envelope-wrap">
+      <h2>A Letter for Ajwa</h2>
+      <div class="envelope" id="envelope" onclick="openEnvelope()">
+        <div class="letter-card"></div>
+        <div class="flap"></div>
+        <div class="seal">♡</div>
+      </div>
+      <p class="hint">Tap the envelope to open it.</p>
+      <button class="btn" id="readBtn" style="display:none" onclick="goTo(3)">Read the Letter</button>
+    </div>
+  </section>
+
+  <section class="page" id="page3">
+    <div class="paper">
+      <h2>Dear Ajwa,</h2>
+
+      <p>I hope your days are always filled with happiness, gentle moments, and beautiful reasons to smile.</p>
+
+      <p>May the sky watch over you when the world feels heavy, and may the earth keep you safe wherever your footsteps lead. May every cloud above you bring comfort, and every flower you pass remind you that softness can still survive in a difficult world.</p>
+
+      <p>Please keep your beauty, not only the beauty seen by the eyes, but also the kindness, warmth, and quiet strength that live within you. And please do not forget to smile. Your smile may be small to you, but it can make an ordinary day feel brighter.</p>
+
+      <p>Whenever you feel tired, remember that you do not have to be strong every second. It is all right to rest. It is all right to take your time. Even the sky needs clouds before it can show a rainbow.</p>
+
+      <p>I hope life brings you people who understand your silence, moments that heal your heart, and dreams that slowly find their way to you. May you always be surrounded by sincere love, peaceful thoughts, and the courage to continue becoming the person you wish to be.</p>
+
+      <p>No matter how uncertain tomorrow may seem, I hope you always remember that you are precious, worthy, and deserving of every good thing that comes your way.</p>
+
+      <p>Take care of yourself, Ajwa. Keep shining gently, keep blooming in your own way, and never lose the beautiful light that makes you who you are.</p>
+
+      <p class="signature">With warm wishes,<br><strong>Ali</strong></p>
+
+      <button class="btn" onclick="goTo(4)">One Last Thing</button>
+    </div>
+  </section>
+
+  <section class="page" id="page4">
+    <div class="rainbow"></div>
+    <div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div>
+    <div class="final-card">
+      <h2>Take Care, Ajwa</h2>
+      <div class="polaroid">
+        <div class="scene">🌸</div>
+      </div>
+      <p>May your heart remain light, your days remain kind, and your smile always find its way back to you.</p>
+      <p><strong>You deserve beautiful days.</strong></p>
+      <button class="btn secondary" onclick="goTo(1)">Read Again</button>
+    </div>
+  </section>
+
+  <script>
+    let currentPage = 1;
+    const music = document.getElementById('bgMusic');
+    const musicBtn = document.getElementById('musicBtn');
+
+    function goTo(n){
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById('page'+n).classList.add('active');
+      currentPage = n;
+      window.scrollTo({top:0,behavior:'smooth'});
+      if(n === 4) flowerRain();
+    }
+
+    function openEnvelope(){
+      const env = document.getElementById('envelope');
+      env.classList.add('open');
+      setTimeout(() => {
+        document.getElementById('readBtn').style.display = 'inline-block';
+      }, 900);
+    }
+
+    musicBtn.addEventListener('click', async () => {
+      try{
+        if(music.paused){
+          await music.play();
+          musicBtn.textContent = '❚❚';
+        }else{
+          music.pause();
+          musicBtn.textContent = '♫';
+        }
+      }catch(e){
+        alert('Add the file "nej-paro-slowed.mp3" beside index.html, then try again.');
+      }
+    });
+
+    document.getElementById('restartBtn').addEventListener('click', () => {
+      document.getElementById('envelope').classList.remove('open');
+      document.getElementById('readBtn').style.display = 'none';
+      goTo(1);
+    });
+
+    function flowerRain(){
+      for(let i=0;i<28;i++){
+        setTimeout(() => {
+          const p = document.createElement('span');
+          p.className = 'petal';
+          p.textContent = ['💙','🩵','🌸','🦋'][Math.floor(Math.random()*4)];
+          p.style.left = Math.random()*100 + 'vw';
+          p.style.fontSize = (18 + Math.random()*22) + 'px';
+          p.style.animationDuration = (5 + Math.random()*5) + 's';
+          p.style.setProperty('--drift', (Math.random()*180-90)+'px');
+          document.body.appendChild(p);
+          setTimeout(()=>p.remove(),11000);
+        }, i*120);
+      }
+    }
+  </script>
+</body>
+</html>
